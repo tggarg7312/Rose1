@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rose Day 🌹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fce7f3 0%, #fecdd3 50%, #fecaca 100%);
+        }
+
+        /* Animated glow */
+        .glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(251, 207, 232, 0.5), transparent);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fbcfe8;
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Rose SVG container */
+        .rose-container {
+            transition: all 1s ease-in-out;
+        }
+
+        .rose-container.blooming svg {
+            animation: bloom 2s ease-in-out forwards;
+        }
+
+        .rose-container.floating svg {
+            animation: floatUp 3s ease-in-out forwards;
+        }
+
+        .rose-container.hidden {
+            opacity: 0;
+        }
+
+        @keyframes bloom {
+            0% { 
+                transform: scale(0.3) rotate(0deg); 
+                opacity: 0.5; 
+            }
+            50% { 
+                transform: scale(1.1) rotate(180deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(1) rotate(360deg); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(-100vh) rotate(20deg); 
+                opacity: 0; 
+            }
+        }
+
+        /* Message */
+        .message {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .message.show {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: bold;
+            color: #e11d48;
+            margin-bottom: 24px;
+        }
+
+        .message .emoji {
+            font-size: clamp(4rem, 12vw, 6rem);
+            margin-bottom: 32px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .message p {
+            font-size: clamp(1.25rem, 4vw, 1.875rem);
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .message .sub {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #4b5563;
+            animation: fadeIn 1s ease-out 0.9s both;
+        }
+
+        /* Rose SVG Styles */
+        .petal-outer {
+            transition: all 2s ease-in-out;
+            transform-origin: 150px 120px;
+        }
+
+        .petal-middle {
+            transition: all 2s ease-in-out 0.2s;
+            transform-origin: 150px 120px;
+        }
+
+        .petal-inner {
+            transition: all 2s ease-in-out 0.4s;
+            transform-origin: 150px 120px;
+        }
+
+        /* Bud state */
+        .bud .petal-outer {
+            transform: scale(0.3);
+            opacity: 0.5;
+        }
+
+        .bud .petal-middle {
+            transform: scale(0.2);
+            opacity: 0.3;
+        }
+
+        .bud .petal-inner {
+            transform: scale(0.1);
+            opacity: 0.2;
+        }
+
+        /* Blooming state */
+        .blooming .petal-outer {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .blooming .petal-middle {
+            transform: scale(0.8);
+            opacity: 1;
+        }
+
+        .blooming .petal-inner {
+            transform: scale(0.6);
+            opacity: 1;
+        }
+
+        /* Bloomed state */
+        .bloomed .petal-outer {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .bloomed .petal-middle {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .bloomed .petal-inner {
+            transform: scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glow"></div>
+        
+        <!-- Particles -->
+        <div id="particles"></div>
+
+        <div class="content">
+            <!-- Rose -->
+            <div id="roseContainer" class="rose-container">
+                <svg id="roseSvg" width="300" height="300" viewBox="0 0 300 300" class="bud" style="filter: drop-shadow(0 10px 30px rgba(225, 29, 72, 0.3))">
+                    <!-- Stem -->
+                    <path d="M150 250 Q140 200 145 150" stroke="#22c55e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    
+                    <!-- Leaf 1 -->
+                    <ellipse cx="135" cy="200" rx="15" ry="25" fill="#22c55e" transform="rotate(-30 135 200)"/>
+                    
+                    <!-- Leaf 2 -->
+                    <ellipse cx="155" cy="180" rx="15" ry="25" fill="#16a34a" transform="rotate(30 155 180)"/>
+
+                    <!-- Outer petals -->
+                    <g class="petal-outer">
+                        <ellipse cx="150" cy="90" rx="35" ry="45" fill="#fb7185" transform="rotate(0 150 120)"/>
+                        <ellipse cx="150" cy="90" rx="35" ry="45" fill="#f43f5e" transform="rotate(72 150 120)"/>
+                        <ellipse cx="150" cy="90" rx="35" ry="45" fill="#fb7185" transform="rotate(144 150 120)"/>
+                        <ellipse cx="150" cy="90" rx="35" ry="45" fill="#f43f5e" transform="rotate(216 150 120)"/>
+                        <ellipse cx="150" cy="90" rx="35" ry="45" fill="#fb7185" transform="rotate(288 150 120)"/>
+                    </g>
+
+                    <!-- Middle petals -->
+                    <g class="petal-middle">
+                        <ellipse cx="150" cy="100" rx="28" ry="38" fill="#e11d48" transform="rotate(36 150 120)"/>
+                        <ellipse cx="150" cy="100" rx="28" ry="38" fill="#be123c" transform="rotate(108 150 120)"/>
+                        <ellipse cx="150" cy="100" rx="28" ry="38" fill="#e11d48" transform="rotate(180 150 120)"/>
+                        <ellipse cx="150" cy="100" rx="28" ry="38" fill="#be123c" transform="rotate(252 150 120)"/>
+                        <ellipse cx="150" cy="100" rx="28" ry="38" fill="#e11d48" transform="rotate(324 150 120)"/>
+                    </g>
+
+                    <!-- Inner petals -->
+                    <g class="petal-inner">
+                        <ellipse cx="150" cy="110" rx="20" ry="30" fill="#9f1239" transform="rotate(0 150 120)"/>
+                        <ellipse cx="150" cy="110" rx="20" ry="30" fill="#881337" transform="rotate(90 150 120)"/>
+                        <ellipse cx="150" cy="110" rx="20" ry="30" fill="#9f1239" transform="rotate(180 150 120)"/>
+                        <ellipse cx="150" cy="110" rx="20" ry="30" fill="#881337" transform="rotate(270 150 120)"/>
+                    </g>
+
+                    <!-- Center -->
+                    <circle cx="150" cy="120" r="12" fill="#be123c"/>
+                    <circle cx="150" cy="120" r="6" fill="#9f1239"/>
+                </svg>
+            </div>
+
+            <!-- Message -->
+            <div id="message" class="message">
+                <h1>Happy Rose Day</h1>
+                <div class="emoji">🌹</div>
+                <p style="animation-delay: 0.6s;">I knew you'd say yes 💖</p>
+                <p class="sub">Thank you for continuing this beautiful journey with me</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Animation sequence
+        const roseContainer = document.getElementById('roseContainer');
+        const roseSvg = document.getElementById('roseSvg');
+        const message = document.getElementById('message');
+
+        // Start animation sequence
+        setTimeout(() => {
+            // Start blooming
+            roseSvg.classList.remove('bud');
+            roseSvg.classList.add('blooming');
+        }, 500);
+
+        setTimeout(() => {
+            // Fully bloomed
+            roseSvg.classList.remove('blooming');
+            roseSvg.classList.add('bloomed');
+        }, 2500);
+
+        setTimeout(() => {
+            // Start floating
+            roseContainer.classList.add('floating');
+        }, 3500);
+
+        setTimeout(() => {
+            // Hide rose and show message
+            roseContainer.classList.add('hidden');
+            message.classList.add('show');
+        }, 6500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should we continue? 🌹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .container {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fce7f3 0%, #fecdd3 50%, #fecaca 100%);
+        }
+
+        /* Animated background */
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .circle1 {
+            top: 80px;
+            left: 40px;
+            width: 128px;
+            height: 128px;
+            background: #fbcfe8;
+        }
+
+        .circle2 {
+            bottom: 80px;
+            right: 40px;
+            width: 160px;
+            height: 160px;
+            background: #fecdd3;
+            animation-delay: 1s;
+        }
+
+        .circle3 {
+            top: 50%;
+            left: 25%;
+            width: 96px;
+            height: 96px;
+            background: #fecaca;
+            animation-delay: 2s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes buttonBounce {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            75% { transform: scale(0.98); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #1f2937;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #4b5563;
+            margin-bottom: 64px;
+            text-align: center;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .buttons-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 200px;
+        }
+
+        .btn {
+            position: absolute;
+            padding: 16px 48px;
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            font-weight: bold;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            touch-action: manipulation;
+        }
+
+        .btn-yes {
+            left: 50%;
+            top: 50%;
+            transform: translate(calc(-50% - 90px), -50%);
+            background: linear-gradient(135deg, #ec4899 0%, #e11d48 100%);
+            color: white;
+            animation: fadeIn 1s ease-out 0.5s both;
+            z-index: 2;
+        }
+
+        .btn-yes:hover {
+            transform: translate(calc(-50% - 90px), -50%) scale(1.05);
+            box-shadow: 0 15px 50px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-yes:active {
+            transform: translate(calc(-50% - 90px), -50%) scale(0.98);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-no.bounce {
+            animation: buttonBounce 0.4s ease-in-out;
+        }
+
+        .encouragement {
+            margin-top: 64px;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #4b5563;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            padding: 0 20px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 32px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 640px) {
+            h1 { margin-bottom: 12px; }
+            .subtitle { margin-bottom: 48px; }
+            .btn { padding: 14px 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Background elements -->
+        <div class="bg-circle circle1"></div>
+        <div class="bg-circle circle2"></div>
+        <div class="bg-circle circle3"></div>
+
+        <!-- Main content -->
+        <div class="content">
+            <h1>Should we continue?</h1>
+            <p class="subtitle">Choose wisely... 💝</p>
+
+            <div class="buttons-container">
+                <button id="btnYes" class="btn btn-yes">YES ❤️</button>
+                <button id="btnNo" class="btn btn-no">NO 💔</button>
+            </div>
+
+            <p id="encouragement" class="encouragement" style="display: none;"></p>
+        </div>
+
+        <div class="footer">Made with 💖</div>
+    </div>
+
+    <script>
+        const btnNo = document.getElementById('btnNo');
+        const btnYes = document.getElementById('btnYes');
+        const encouragement = document.getElementById('encouragement');
+        const container = document.querySelector('.buttons-container');
+        
+        let noAttempts = 0;
+        let currentYesScale = 1;
+
+        // Initial position for No button
+        const containerRect = container.getBoundingClientRect();
+        let noPosition = {
+            x: containerRect.width / 2 + 80,
+            y: containerRect.height / 2
+        };
+
+        // Set initial No button position
+        btnNo.style.left = noPosition.x + 'px';
+        btnNo.style.top = noPosition.y + 'px';
+        btnNo.style.transform = 'translate(-50%, -50%)';
+
+        function moveNoButton() {
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = btnNo.getBoundingClientRect();
+            
+            const padding = 40;
+            const maxX = containerRect.width - buttonRect.width / 2 - padding;
+            const maxY = containerRect.height - buttonRect.height / 2 - padding;
+            
+            let newX, newY;
+            let attempts = 0;
+            
+            // Find a position far enough from current position
+            do {
+                newX = Math.random() * (maxX - padding) + padding;
+                newY = Math.random() * (maxY - padding) + padding;
+                attempts++;
+            } while (
+                attempts < 10 &&
+                Math.abs(newX - noPosition.x) < 100 &&
+                Math.abs(newY - noPosition.y) < 100
+            );
+
+            noPosition = { x: newX, y: newY };
+            
+            // Add bounce animation
+            btnNo.classList.add('bounce');
+            setTimeout(() => btnNo.classList.remove('bounce'), 400);
+            
+            // Move button
+            btnNo.style.left = newX + 'px';
+            btnNo.style.top = newY + 'px';
+            
+            // Increment attempts
+            noAttempts++;
+            
+            // Grow Yes button every 2 attempts
+            if (noAttempts % 2 === 0) {
+                currentYesScale = Math.min(currentYesScale + 0.15, 2);
+                btnYes.style.transform = `translate(calc(-50% - 90px), -50%) scale(${currentYesScale})`;
+            }
+            
+            // Show encouragement
+            showEncouragement();
+        }
+
+        function showEncouragement() {
+            if (noAttempts > 3) {
+                let message = '';
+                if (noAttempts > 8) {
+                    message = "You know you want to say yes... 🥺";
+                } else if (noAttempts > 6) {
+                    message = "Still trying? 😊";
+                } else {
+                    message = "Come on, you know the answer... 😉";
+                }
+                encouragement.textContent = message;
+                encouragement.style.display = 'block';
+            }
+        }
+
+        // Event listeners for No button
+        btnNo.addEventListener('mouseenter', moveNoButton);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // Yes button - go to rose page
+        btnYes.addEventListener('click', () => {
+            window.location.href = 'rose.html';
+        });
+    </script>
+</body>
+</html>
